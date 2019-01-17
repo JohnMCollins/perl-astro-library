@@ -6,11 +6,11 @@ use Carp;
 
 sub quad2bin ($) {
     my $quad = shift;
-    my ($addr,$prof) = $quad =~ m;^([^/]+)(:?/(\d+))?$;;
+    my ($addr,$prof) = $quad =~ m;^([^/]+)(?:/(\d+))?$;;
     croak "Invalid IPv4 CIDR $quad" unless $addr;
 	$addr = inet_aton($addr);
 	croak "Invalid IPv4 addr $quad" unless $addr;
-	$addr = unpack('L', $addr);
+	$addr = unpack('N', $addr);
 	if ($prof) {
 		$prof += 0;
 	}
@@ -23,7 +23,7 @@ sub quad2bin ($) {
 sub bin2quad ($;$) {
     my $bin = shift;
     my $prof = shift or 32;
-	my $addr = inet_ntoa(pack('L', $bin));
+	my $addr = inet_ntoa(pack('N', $bin));
 	$addr .= '/' . $prof if $prof < 32;
 	$addr;
 }

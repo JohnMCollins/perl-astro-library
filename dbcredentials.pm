@@ -1,3 +1,10 @@
+# @Author: John M Collins <jmc>
+# @Date:   2017-11-01T18:09:34+00:00
+# @Email:  jmc@toad.me.uk
+# @Filename: dbcredentials.pm
+# @Last modified by:   jmc
+# @Last modified time: 2019-01-17T16:08:21+00:00
+
 # Attempts to do the same thing as ther Python version
 
 package dbcredentials;
@@ -6,6 +13,7 @@ use Carp;
 
 our $Configfilepaths;
 our @credfields = qw/host database user password/;
+our @addfields = qw/login localport remoteport/;
 
 $Configfilepaths->{system} = '/etc/dbcred.ini';
 
@@ -91,6 +99,10 @@ sub get {
         $p = $this->expand_vars($name, $p) unless $part eq 'password';
         $ret->{$part} = $p;
     }
+    for my $part (@addfields) {
+        my $p = $this->{$name}->{$part} || $this->{DEFAULT}->{$part};
+        $ret->{$part} = $p;
+    }
     $ret;
 }
 
@@ -102,7 +114,7 @@ sub set_creds {
     while (my ($k,$v) = each %$creds)  {
         $this->{$name}->{$k} = $v;
     }
-    for my $c (@credfields) {
+    for my $c (@credfields, @addfields) {
         delete $this->{$name}->{$c} unless exists $creds->{$c};
     }
     $this;
