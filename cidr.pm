@@ -27,14 +27,14 @@ sub bin2quad ($;$) {
 	$addr .= '/' . $prof if $prof < 32;
 	$addr;
 }
-  
+
 sub range2cidr ($$) {
     my $lo = shift;
     my $hi = shift;
     my @results;
 
     while ($lo <= $hi)  {
-        
+
         my $prefix = 32;
 
         for (;;) {
@@ -49,7 +49,7 @@ sub range2cidr ($$) {
         push @results, bin2quad($lo, $prefix);
         $lo = ((($lo | ~(0xffffffff << (32 - $prefix)))) & 0xffffffff) + 1;
     }
-    
+
     @results;
 }
 
@@ -63,5 +63,3 @@ sub cidr2range ($) {
 }
 
 1;
-
-

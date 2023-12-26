@@ -38,7 +38,8 @@ for my $e (qw/LOGNAME DBHOST/)  {
 sub parsefile {
     my $this = shift;
     my $fsn = shift;
-    return $this unless open(CF, $Configfilepaths->{$fsn});
+    my $cfn = $Configfilepaths->{$fsn};
+    return $this unless -f $cfn and -r $cfn and open(CF, "keycat $cfn|");
     my $csect = 'DEFAULT';
     while (<CF>)  {
         chop;
